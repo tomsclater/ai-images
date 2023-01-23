@@ -7,13 +7,23 @@ import { FormField, Loader } from '../components';
 
 const CreatePost = () => {
   const navigate = useNavigate();
+
   const [form, setForm] = useState({
     name: '',
     prompt: '',
     photo: '',
   });
+
   const [generatingImg, setGeneratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleSurpriseMe = () => {
+    const randomPrompt = getRandomPrompt(form.prompt);
+    setForm({...form, prompt: randomPrompt });
+  };
+
 
   const generateImage = async () => {
     if(form.prompt) {
@@ -24,34 +34,49 @@ const CreatePost = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ prompt: form.prompt}),
-        })
+          body: JSON.stringify({
+            prompt: form.prompt,
+          }),
+        });
 
         const data = await response.json();
-
-        setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` })
-      } catch (error) {
-        alert(error);
+        setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
+      } catch (err) {
+        alert(err);
       } finally {
         setGeneratingImg(false);
       }
     } else {
-      alert('Please enter a prompt')
+      alert('Please enter a prompt');
     }
-  }
+  };
 
-  const handleSubmit = () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  }
+    if (form.prompt && form.photo) {
+      setLoading(true);
+      try {
+        const response = await fetch('http://localhost:8080/api/v1/post', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ...form }),
+        });
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
-
-  const handleSurpriseMe = () => {
-    const randomPrompt = getRandomPrompt(form.prompt)
-    setForm({...form, prompt: randomPrompt })
-  }
+        await response.json();
+        alert('Success');
+        navigate('/');
+      } catch (err) {
+        alert(err);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      alert('Please enter a prompt to generate an image');
+    }
+  };
 
   
 
@@ -122,12 +147,12 @@ const CreatePost = () => {
                 type="submit"
                 className="mt-3 text-white bg-[#6469ff] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
               >
-                {loading ? 'Sharing...' : 'Share'}
+            {loading ? 'Sharing...' : 'Share with the Community'}
               </button>
         </div>
       </form>
     </section>
-  )
-}
+  );
+};
 
-export default CreatePost
+export default CreatePost;
