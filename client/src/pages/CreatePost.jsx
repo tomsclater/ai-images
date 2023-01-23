@@ -101,7 +101,7 @@ const CreatePost = () => {
             labelName="Prompt"
             type="text"
             name="prompt"
-            placeholder="Bichon Maltese Artistic Beautiful Luscious"
+            placeholder="Bichon Maltese Artist Van Gogh"
             value={form.prompt}
             handleChange={handleChange}
             isSurpriseMe
