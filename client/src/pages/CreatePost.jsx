@@ -93,7 +93,7 @@ const CreatePost = () => {
             labelName="Your name"
             type="text"
             name="name"
-            placeholder="Tom Sclater"
+            placeholder="Your Name"
             value={form.name}
             handleChange={handleChange}
           />
@@ -101,7 +101,7 @@ const CreatePost = () => {
             labelName="Prompt"
             type="text"
             name="prompt"
-            placeholder="Bichon Maltese Artist Van Gogh"
+            placeholder="A painting of a dog painting a cat"
             value={form.prompt}
             handleChange={handleChange}
             isSurpriseMe
