@@ -26,4 +26,6 @@ const Card = ({ _id, name, prompt, photo }) => {
   )
   };
 
+  // COMMENT
+
 export default Card;
